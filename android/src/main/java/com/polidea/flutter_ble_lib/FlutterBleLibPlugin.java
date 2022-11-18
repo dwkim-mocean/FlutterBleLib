@@ -1,6 +1,8 @@
 package com.polidea.flutter_ble_lib;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.polidea.flutter_ble_lib.constant.ArgumentKey;
@@ -42,7 +44,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 public class FlutterBleLibPlugin implements MethodCallHandler {
 
     static final String TAG = FlutterBleLibPlugin.class.getName();
-
+    private Handler uiThreadHandler = new Handler(Looper.getMainLooper());
     private BleAdapter bleAdapter;
     private Context context;
     private AdapterStateStreamHandler adapterStateStreamHandler = new AdapterStateStreamHandler();
@@ -53,24 +55,48 @@ public class FlutterBleLibPlugin implements MethodCallHandler {
 
     private List<CallDelegate> delegates = new LinkedList<>();
 
-    public static void registerWith(Registrar registrar) {
-        final MethodChannel channel = new MethodChannel(registrar.messenger(), ChannelName.FLUTTER_BLE_LIB);
+    public static void registerWith(final Registrar registrar) {
 
-        final EventChannel bluetoothStateChannel = new EventChannel(registrar.messenger(), ChannelName.ADAPTER_STATE_CHANGES);
-        final EventChannel restoreStateChannel = new EventChannel(registrar.messenger(), ChannelName.STATE_RESTORE_EVENTS);
-        final EventChannel scanningChannel = new EventChannel(registrar.messenger(), ChannelName.SCANNING_EVENTS);
-        final EventChannel connectionStateChannel = new EventChannel(registrar.messenger(), ChannelName.CONNECTION_STATE_CHANGE_EVENTS);
-        final EventChannel characteristicMonitorChannel = new EventChannel(registrar.messenger(), ChannelName.MONITOR_CHARACTERISTIC);
+        uiThreadHandler.post(new Runnable () {
+            @Override
+            public void run () {
+                final MethodChannel channel = new MethodChannel(registrar.messenger(), ChannelName.FLUTTER_BLE_LIB);
 
-        final FlutterBleLibPlugin plugin = new FlutterBleLibPlugin(registrar.context());
+                final EventChannel bluetoothStateChannel = new EventChannel(registrar.messenger(), ChannelName.ADAPTER_STATE_CHANGES);
+                final EventChannel restoreStateChannel = new EventChannel(registrar.messenger(), ChannelName.STATE_RESTORE_EVENTS);
+                final EventChannel scanningChannel = new EventChannel(registrar.messenger(), ChannelName.SCANNING_EVENTS);
+                final EventChannel connectionStateChannel = new EventChannel(registrar.messenger(), ChannelName.CONNECTION_STATE_CHANGE_EVENTS);
+                final EventChannel characteristicMonitorChannel = new EventChannel(registrar.messenger(), ChannelName.MONITOR_CHARACTERISTIC);
 
-        channel.setMethodCallHandler(plugin);
+                final FlutterBleLibPlugin plugin = new FlutterBleLibPlugin(registrar.context());
 
-        scanningChannel.setStreamHandler(plugin.scanningStreamHandler);
-        bluetoothStateChannel.setStreamHandler(plugin.adapterStateStreamHandler);
-        restoreStateChannel.setStreamHandler(plugin.restoreStateStreamHandler);
-        connectionStateChannel.setStreamHandler(plugin.connectionStateStreamHandler);
-        characteristicMonitorChannel.setStreamHandler(plugin.characteristicsMonitorStreamHandler);
+                channel.setMethodCallHandler(plugin);
+
+                scanningChannel.setStreamHandler(plugin.scanningStreamHandler);
+                bluetoothStateChannel.setStreamHandler(plugin.adapterStateStreamHandler);
+                restoreStateChannel.setStreamHandler(plugin.restoreStateStreamHandler);
+                connectionStateChannel.setStreamHandler(plugin.connectionStateStreamHandler);
+                characteristicMonitorChannel.setStreamHandler(plugin.characteristicsMonitorStreamHandler);
+            }
+        });
+
+//        final MethodChannel channel = new MethodChannel(registrar.messenger(), ChannelName.FLUTTER_BLE_LIB);
+//
+//        final EventChannel bluetoothStateChannel = new EventChannel(registrar.messenger(), ChannelName.ADAPTER_STATE_CHANGES);
+//        final EventChannel restoreStateChannel = new EventChannel(registrar.messenger(), ChannelName.STATE_RESTORE_EVENTS);
+//        final EventChannel scanningChannel = new EventChannel(registrar.messenger(), ChannelName.SCANNING_EVENTS);
+//        final EventChannel connectionStateChannel = new EventChannel(registrar.messenger(), ChannelName.CONNECTION_STATE_CHANGE_EVENTS);
+//        final EventChannel characteristicMonitorChannel = new EventChannel(registrar.messenger(), ChannelName.MONITOR_CHARACTERISTIC);
+//
+//        final FlutterBleLibPlugin plugin = new FlutterBleLibPlugin(registrar.context());
+//
+//        channel.setMethodCallHandler(plugin);
+//
+//        scanningChannel.setStreamHandler(plugin.scanningStreamHandler);
+//        bluetoothStateChannel.setStreamHandler(plugin.adapterStateStreamHandler);
+//        restoreStateChannel.setStreamHandler(plugin.restoreStateStreamHandler);
+//        connectionStateChannel.setStreamHandler(plugin.connectionStateStreamHandler);
+//        characteristicMonitorChannel.setStreamHandler(plugin.characteristicsMonitorStreamHandler);
     }
 
     private FlutterBleLibPlugin(Context context) {
