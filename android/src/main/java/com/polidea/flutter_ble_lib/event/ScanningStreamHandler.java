@@ -32,28 +32,28 @@ public class ScanningStreamHandler implements EventChannel.StreamHandler {
 
     @Override
     synchronized public void onCancel(Object o) {
-        scanResultsSink = null;
+        //scanResultsSink = null;
     }
 
     synchronized public void onScanResult(ScanResult scanResult) {
         if (scanResultsSink != null) {
-            scanResultsSink.success(scanResultJsonConverter.toJson(scanResult));
+            //scanResultsSink.success(scanResultJsonConverter.toJson(scanResult));
         }
     }
 
     synchronized public void onError(BleError error) {
         if (scanResultsSink != null) {
-            scanResultsSink.error(
-                    String.valueOf(error.errorCode.code),
-                    error.reason,
-                    bleErrorJsonConverter.toJson(error));
-            scanResultsSink.endOfStream();
+            //scanResultsSink.error(
+            //        String.valueOf(error.errorCode.code),
+            //        error.reason,
+            //        bleErrorJsonConverter.toJson(error));
+            //scanResultsSink.endOfStream();
         }
     }
 
     synchronized public void onComplete() {
         if (scanResultsSink != null) {
-            scanResultsSink.endOfStream();
+            //scanResultsSink.endOfStream();
         }
     }
 }
