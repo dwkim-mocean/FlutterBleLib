@@ -6,6 +6,9 @@ import com.polidea.multiplatformbleadapter.ScanResult;
 import com.polidea.multiplatformbleadapter.errors.BleError;
 
 import io.flutter.plugin.common.EventChannel;
+import android.os.Handler;
+import android.os.Looper;
+
 
 public class ScanningStreamHandler implements EventChannel.StreamHandler {
 
