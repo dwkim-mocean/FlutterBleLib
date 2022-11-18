@@ -14,7 +14,7 @@ public class ScanningStreamHandler implements EventChannel.StreamHandler {
 
     private Handler uiThreadHandler = new Handler(Looper.getMainLooper());
     
-    private EventChannel.EventSink scanResultsSink;
+    //private EventChannel.EventSink scanResultsSink;
     private ScanResultJsonConverter scanResultJsonConverter = new ScanResultJsonConverter();
     private BleErrorJsonConverter bleErrorJsonConverter = new BleErrorJsonConverter();
 
@@ -25,7 +25,7 @@ public class ScanningStreamHandler implements EventChannel.StreamHandler {
         uiThreadHandler.post(new Runnable () {
             @Override
             public void run () {
-                scanResultsSink = eventSink;
+                EventChannel.EventSink scanResultsSink = eventSink;
             }
         });
     }
