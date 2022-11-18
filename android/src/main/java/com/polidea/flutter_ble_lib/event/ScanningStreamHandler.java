@@ -12,7 +12,7 @@ import android.os.Looper;
 
 public class ScanningStreamHandler implements EventChannel.StreamHandler {
 
-    //private Handler uiThreadHandler = new Handler(Looper.getMainLooper());
+    private Handler uiThreadHandler = new Handler(Looper.getMainLooper());
     
     private EventChannel.EventSink scanResultsSink;
     private ScanResultJsonConverter scanResultJsonConverter = new ScanResultJsonConverter();
@@ -22,7 +22,7 @@ public class ScanningStreamHandler implements EventChannel.StreamHandler {
     synchronized public void onListen(Object o, EventChannel.EventSink eventSink) {
         
         //scanResultsSink = eventSink;
-        new Handler(Looper.getMainLooper()).post(new Runnable () {
+        uiThreadHandler.post(new Runnable () {
             @Override
             public void run () {
                 scanResultsSink = eventSink;
