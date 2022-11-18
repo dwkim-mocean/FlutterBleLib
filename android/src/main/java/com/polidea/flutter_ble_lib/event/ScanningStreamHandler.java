@@ -15,7 +15,7 @@ public class ScanningStreamHandler implements EventChannel.StreamHandler {
 
     @Override
     synchronized public void onListen(Object o, EventChannel.EventSink eventSink) {
-        scanResultsSink = eventSink;
+        //scanResultsSink = eventSink;
     }
 
     @Override
@@ -25,7 +25,7 @@ public class ScanningStreamHandler implements EventChannel.StreamHandler {
 
     synchronized public void onScanResult(ScanResult scanResult) {
         if (scanResultsSink != null) {
-            //scanResultsSink.success(scanResultJsonConverter.toJson(scanResult));
+            scanResultsSink.success(scanResultJsonConverter.toJson(scanResult));
         }
     }
 
