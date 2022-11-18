@@ -15,12 +15,12 @@ public class ScanningStreamHandler implements EventChannel.StreamHandler {
 
     @Override
     synchronized public void onListen(Object o, EventChannel.EventSink eventSink) {
-        //scanResultsSink = eventSink;
+        scanResultsSink = eventSink;
     }
 
     @Override
     synchronized public void onCancel(Object o) {
-        //scanResultsSink = null;
+        scanResultsSink = null;
     }
 
     synchronized public void onScanResult(ScanResult scanResult) {
@@ -31,17 +31,17 @@ public class ScanningStreamHandler implements EventChannel.StreamHandler {
 
     synchronized public void onError(BleError error) {
         if (scanResultsSink != null) {
-            //scanResultsSink.error(
-             //       String.valueOf(error.errorCode.code),
-             //       error.reason,
-             //       bleErrorJsonConverter.toJson(error));
-            //scanResultsSink.endOfStream();
+            scanResultsSink.error(
+                    String.valueOf(error.errorCode.code),
+                    error.reason,
+                    bleErrorJsonConverter.toJson(error));
+            scanResultsSink.endOfStream();
         }
     }
 
     synchronized public void onComplete() {
         if (scanResultsSink != null) {
-            //scanResultsSink.endOfStream();
+            scanResultsSink.endOfStream();
         }
     }
 }
