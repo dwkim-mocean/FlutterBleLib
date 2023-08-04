@@ -44,7 +44,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 public class FlutterBleLibPlugin implements MethodCallHandler {
 
     static final String TAG = FlutterBleLibPlugin.class.getName();
-    private Handler uiThreadHandler = new Handler(Looper.getMainLooper());
+    private static Handler uiThreadHandler = new Handler(Looper.getMainLooper());
     private BleAdapter bleAdapter;
     private Context context;
     private AdapterStateStreamHandler adapterStateStreamHandler = new AdapterStateStreamHandler();
